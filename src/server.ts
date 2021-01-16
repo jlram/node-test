@@ -1,18 +1,28 @@
+import * as dotenv from 'dotenv'
 import * as express from 'express'
-
+import * as api from './routes/api'
+import * as bp from 'body-parser'
 const app = express()
 
+// middleware
+app.use(express.json())
+app.use(bp.urlencoded({
+    extended: true
+}));
+
+dotenv.config()
+
+// Hello World
 app.get('/', (request:any, response:any) => {
     response.send('Hello World')
 })
 
-app.get('/hola', (request:any, response:any) => {
-    response.send('Hola Mundo')
-})
 
-
-const PORT = 8080
+// start server
+const PORT = process.env.PORT
 app.listen(PORT, () => {
      console.log(`Up and running in http://localhost:${PORT}`)
 })
+
+api.register(app) // /api
 
