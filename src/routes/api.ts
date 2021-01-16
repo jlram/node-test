@@ -294,7 +294,6 @@ export const register = (app: express.Application) => {
 
             // like post
             if (query[0] == undefined) {
-                console.log(data.post_id)
                 const id = await db.one(`
                     INSERT INTO like_post( post_id, user_id )
                     VALUES( $[post_id], $[user_id])
@@ -302,7 +301,6 @@ export const register = (app: express.Application) => {
 
                 return res.json({ id })
             } else { // unlike post
-                console.log(data)
                 const id = await db.result(`
                     DELETE
                     FROM    like_post
