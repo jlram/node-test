@@ -10,7 +10,7 @@ app.use(bp.urlencoded({
     extended: true
 }))
 
-dotenv.config()
+dotenv.config() // Grabs config form .env variable
 
 // Hello World
 app.get('/', (request:any, response:any) => {
@@ -26,3 +26,4 @@ app.listen(PORT, () => {
 
 api.register(app) // /api
 
+export default app // testing purposes

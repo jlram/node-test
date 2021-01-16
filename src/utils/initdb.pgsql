@@ -1,4 +1,5 @@
 -- Drops post table
+DROP TABLE IF EXISTS like_post;
 DROP TABLE IF EXISTS post;
 DROP TABLE IF EXISTS custom_user;
 

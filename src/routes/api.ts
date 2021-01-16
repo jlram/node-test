@@ -21,14 +21,15 @@ export const register = (app: express.Application) => {
     app.get(`/api/users`, async (req: any, res) => {
         const user_id = req.header('Authorization')
         if (!user_id) {
+            res.status(403)
             return res.json({ error: "Not authorized" })
         }
 
         try {
-            const query = await db.any(`SELECT * FROM csustom_user`)
+            const query = await db.any(`SELECT * FROM custom_user`)
             return res.json(query)
         } catch (err) {
-            res.status(500)
+            res.status(500) // Internal Server Error
             res.json({ error: err.message || err })
         }
     })
@@ -37,6 +38,7 @@ export const register = (app: express.Application) => {
     app.get(`/api/users/:id`, async (req: any, res) => {
         const user_id = req.header('Authorization')
         if (!user_id) {
+            res.status(403) // Not authorized
             return res.json({ error: "Not authorized" })
         }
 
@@ -48,12 +50,12 @@ export const register = (app: express.Application) => {
                 { id: req.params.id })
             
             if (query[0] == undefined) {
-                res.status(404)
+                res.status(404) // Not found
                 res.json({ error: 'User not found' })  
             }
             return res.json(query[0])
         } catch (err) {
-            res.status(500)
+            res.status(500) // Internal Server Error
             res.json({ error: err.message || err })
         }
     })
@@ -62,6 +64,7 @@ export const register = (app: express.Application) => {
     app.post(`/api/users`, async (req: any, res) => {
         const user_id = req.header('Authorization')
         if (!user_id) {
+            res.status(403) // Not authorized
             return res.json({ error: "Not authorized" })
         }
 
@@ -71,10 +74,10 @@ export const register = (app: express.Application) => {
                 VALUES( $[name], $[surname])
                 RETURNING id;`,
                 { ...req.body })
-            res.status(201)
+            res.status(201) // Created
             return res.json({ id })
         } catch (err) {
-            res.status(500)
+            res.status(500) // Internal Server Error
             res.json({ error: err.message || err })
         }
     })
@@ -83,6 +86,7 @@ export const register = (app: express.Application) => {
     app.put(`/api/users/:id`, async (req: any, res) => {
         const user_id = req.header('Authorization')
         if (!user_id) {
+            res.status(403) // Not authorized
             return res.json({ error: "Not authorized" })
         }
 
@@ -98,9 +102,9 @@ export const register = (app: express.Application) => {
                 { id: req.params.id, ...req.body })
             return res.json({ id })
         } catch (err) {
-            res.status(500)
+            res.status(500) // Internal Server Error
             if (err.message === 'No data returned from the query.') {
-                res.status(404)
+                res.status(404) // Not found
             }
             res.json({ error: err.message || err })
         }
@@ -110,6 +114,7 @@ export const register = (app: express.Application) => {
     app.delete(`/api/users/:id`, async (req: any, res) => {
         const user_id = req.header('Authorization')
         if (!user_id) {
+            res.status(403) // Not authorized
             return res.json({ error: "Not authorized" })
         }
 
@@ -119,10 +124,10 @@ export const register = (app: express.Application) => {
                 FROM    custom_user
                 WHERE   id = $[id]`,
                 { id: req.params.id }, (r) => r.rowCount)
-            res.status(204)
+            res.status(204) // No content
             return res.json({ users_deleted: id })
         } catch (err) {
-            res.status(500)
+            res.status(500) // Internal Server Error
             res.json({ error: err.message || err })
         }
     })
@@ -135,6 +140,7 @@ export const register = (app: express.Application) => {
     app.get(`/api/posts`, async (req: any, res) => {
         const user_id = req.header('Authorization')
         if (!user_id) {
+            res.status(403) // Not authorized
             return res.json({ error: "Not authorized" })
         }
 
@@ -142,7 +148,7 @@ export const register = (app: express.Application) => {
             const query = await db.any(`SELECT * FROM post`)
             return res.json(query)
         } catch (err) {
-            res.status(500)
+            res.status(500) // Internal Server Error
             res.json({ error: err.message || err })
         }
     })
@@ -151,6 +157,7 @@ export const register = (app: express.Application) => {
     app.get(`/api/posts/:id`, async (req: any, res) => {
         const user_id = req.header('Authorization')
         if (!user_id) {
+            res.status(403) // Not authorized
             return res.json({ error: "Not authorized" })
         }
 
@@ -162,12 +169,12 @@ export const register = (app: express.Application) => {
                 { id: req.params.id })
             
             if (query[0] == undefined) {
-                res.status(404)
+                res.status(404) // Not found
                 res.json({ error: 'User not found' })  
             }
             return res.json(query[0])
         } catch (err) {
-            res.status(500)
+            res.status(500) // Internal Server Error
             res.json({ error: err.message || err })
         }
     })
@@ -176,6 +183,7 @@ export const register = (app: express.Application) => {
     app.post(`/api/posts`, async (req: any, res) => {
         const user_id = req.header('Authorization')
         if (!user_id) {
+            res.status(403) // Not authorized
             return res.json({ error: "Not authorized" })
         }
 
@@ -185,10 +193,10 @@ export const register = (app: express.Application) => {
                 VALUES( $[name], $[surname])
                 RETURNING id;`,
                 { ...req.body })
-            res.status(201)
+            res.status(201) // Created
             return res.json({ id })
         } catch (err) {
-            res.status(500)
+            res.status(500) // Internal Server Error
             res.json({ error: err.message || err })
         }
     })
@@ -197,6 +205,7 @@ export const register = (app: express.Application) => {
     app.put(`/api/posts/:id`, async (req: any, res) => {
         const user_id = req.header('Authorization')
         if (!user_id) {
+            res.status(403) // Not authorized
             return res.json({ error: "Not authorized" })
         }
 
@@ -212,9 +221,9 @@ export const register = (app: express.Application) => {
                 { id: req.params.id, ...req.body })
             return res.json({ id })
         } catch (err) {
-            res.status(500)
+            res.status(500) // Internal Server Error
             if (err.message === 'No data returned from the query.') {
-                res.status(404)
+                res.status(404) // Not found
             }
             res.json({ error: err.message || err })
         }
@@ -224,6 +233,7 @@ export const register = (app: express.Application) => {
     app.delete(`/api/posts/:id`, async (req: any, res) => {
         const user_id = req.header('Authorization')
         if (!user_id) {
+            res.status(403) // Not authorized
             return res.json({ error: "Not authorized" })
         }
 
@@ -233,10 +243,10 @@ export const register = (app: express.Application) => {
                 FROM    post
                 WHERE   id = $[id]`,
                 { id: req.params.id }, (r) => r.rowCount)
-            res.status(204)
+            res.status(204) // No content
             return res.json({ id })
         } catch (err) {
-            res.status(500)
+            res.status(500) // Internal Server Error
             res.json({ error: err.message || err })
         }
     })
@@ -245,6 +255,7 @@ export const register = (app: express.Application) => {
     app.get(`/api/posts/:id/likes`, async (req: any, res) => {
         const user_id = req.header('Authorization')
         if (!user_id) {
+            res.status(403) // Not authorized
             return res.json({ error: "Not authorized" })
         }
 
@@ -256,7 +267,7 @@ export const register = (app: express.Application) => {
                 { id: req.params.id })
             return res.json({ likes: query[0].count })
         } catch (err) {
-            res.status(500)
+            res.status(500) // Internal Server Error
             res.json({ error: err.message || err })
         }
     })
@@ -268,6 +279,7 @@ export const register = (app: express.Application) => {
         try {
             const user_id = req.header('Authorization')
             if (!user_id) {
+                res.status(403) // Not authorized
                 return res.json({ error: "Not authorized" })
             }
 
@@ -297,7 +309,7 @@ export const register = (app: express.Application) => {
                     WHERE   post_id = $[post_id]
                     AND user_id = $[user_id]`,
                     data, (r) => r.rowCount)
-                res.status(204)
+                res.status(204) // No Content
                 return res.json({ elements_unliked: data.post_id })
             }
             return res.json(query)

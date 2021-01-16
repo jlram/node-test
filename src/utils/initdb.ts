@@ -2,17 +2,15 @@ import * as dotenv from "dotenv"
 import * as fs from "fs-extra"
 import { Client } from "pg"
 
-const init = async () => {
-    // read environment variables
-    dotenv.config()
+export const init = async () => {    
+    dotenv.config() // grabs .env information
     // create an instance of the PostgreSQL client
     const client = new Client()
     try {
-        // connect to the local database server
         await client.connect()
-        // read the contents of the initdb.pgsql file
+        // reads initdb.pgsl
         const sql = await fs.readFile( "./src/utils/initdb.pgsql", { encoding: "UTF-8" } )
-        // split the file into separate statements
+        // reads each line
         const statements = sql.split( /;\s*$/m )
         for ( const statement of statements ) {
             if ( statement.length > 3 ) {
@@ -24,7 +22,6 @@ const init = async () => {
         console.log( err )
         throw err
     } finally {
-        // close the database client
         await client.end()
     }
 }
